@@ -1,0 +1,9 @@
+<svg width="220" height="40" viewBox="0 0 220 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sr_brand_grad" x1="0" y1="0" x2="0" y2="40" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" offset="0%"/>
+      <stop stop-color="#B0B0B0" offset="100%"/>
+    </linearGradient>
+  </defs>
+  <text x="0" y="30" fill="url(#sr_brand_grad)" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="900" letter-spacing="-0.03em">SR PICTURES</text>
+</svg>

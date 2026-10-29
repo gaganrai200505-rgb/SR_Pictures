@@ -1,0 +1,101 @@
+import { Link } from 'react-router-dom';
+import NewsletterForm from '../components/NewsletterForm';
+import Subtitle from '../components/Subtitle';
+import { blogPosts } from '../data/blog';
+
+export default function Blog() {
+  return (
+    <>
+    <div id="top" className="top"></div>
+    <header className="section-blog-header">
+      <div className="padding-global">
+        <div className="container-large">
+          <div className="padding-top-header">
+            <div className="heading-wrap is-center">
+              <Subtitle>Video Journal</Subtitle>
+              <div className="title-wrapper">
+                <h2 className="heading-style-h2">Creative</h2>
+              </div>
+              <div className="title-wrapper">
+                <h2 className="heading-style-h2">Insights</h2>
+              </div>
+            </div>
+            <div className="spacer-small"></div>
+            <div className="max-width-medium align-center">
+              <div className="text-align-center">
+                <p className="text-size-medium text-color-secondary">Insights, stories, and ideas about video production, cinematography, and creative storytelling from our studio.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <section className="section-blog-content">
+      <div className="padding-global">
+        <div className="container-large">
+          <div className="padding-section-medium">
+            <div className="w-dyn-list">
+              <div role="list" className="blog-content-grid w-dyn-items">
+                {blogPosts.map((post) => (
+                  <div role="listitem" className="w-dyn-item" key={post.slug}>
+                    <div className="blog-content-wrapper">
+                      <div className="post-container">
+                        <div className="w-layout-grid blog-inner-grid">
+                          <Link to={`/blog-post/${post.slug}`} className="blog-image-wrap w-inline-block">
+                            <img src={post.image} alt={post.title} className="cover-image" loading="lazy" />
+                          </Link>
+                          <div className="blog-content">
+                            <div className="w-layout-grid blog-grid">
+                              <div className="blog-content-item">
+                                <Subtitle>{post.category}</Subtitle>
+                                <h2 className="blog-title">{post.title}</h2>
+                              </div>
+                              <div className="dividing-line"></div>
+                              <div className="blog-content-item">
+                                <Link to={`/blog-post/${post.slug}`} className="button w-button">
+                                  Read More
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="spacer-large"></div>
+          </div>
+          <div className="dividing-line"></div>
+        </div>
+      </div>
+    </section>
+    <section className="section-blog-newsletter">
+      <div className="padding-global">
+        <div className="container-large">
+          <div className="padding-section-large">
+            <div className="heading-wrap is-center">
+              <Subtitle>Join Newsletter</Subtitle>
+              <div className="title-wrapper">
+                <div className="top-title">
+                  <h2 className="heading-style-h2">Stay</h2>
+                </div>
+              </div>
+              <div className="title-wrapper">
+                <div className="bottom-title">
+                  <h2 className="heading-style-h2">Updated</h2>
+                </div>
+              </div>
+            </div>
+            <div className="spacer-xlarge"></div>
+            <div id="w-node-_97474925-048e-aa7b-8f11-4d51b21eee20-805165ac" className="max-width-large align-center">
+              <NewsletterForm id="w-node-e4edcf7f-0f07-f5fe-fe69-595c9122d8a2-805165ac" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    </>
+  );
+}
