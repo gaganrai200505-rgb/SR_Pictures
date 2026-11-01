@@ -6,6 +6,8 @@
 class SoundController {
   private ctx: AudioContext | null = null;
   public enabled: boolean = true;
+  private lastStickerTime: number = 0;
+  private lastShutterTime: number = 0;
 
   private getContext(): AudioContext | null {
     if (typeof window === 'undefined') return null;
@@ -26,6 +28,9 @@ class SoundController {
    */
   public playStickerPop(): void {
     if (!this.enabled) return;
+    const nowMs = Date.now();
+    if (nowMs - this.lastStickerTime < 70) return; // Rate limit rapid clicks
+    this.lastStickerTime = nowMs;
     const ctx = this.getContext();
     if (!ctx) return;
 
@@ -58,6 +63,9 @@ class SoundController {
    */
   public playShutterClick(): void {
     if (!this.enabled) return;
+    const nowMs = Date.now();
+    if (nowMs - this.lastShutterTime < 80) return; // Rate limit shutter clicks
+    this.lastShutterTime = nowMs;
     const ctx = this.getContext();
     if (!ctx) return;
 

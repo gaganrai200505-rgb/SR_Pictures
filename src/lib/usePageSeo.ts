@@ -30,3 +30,4 @@ export function usePageSeo({ title, description }: SeoProps) {
     };
   }, [title, description]);
 }
+
