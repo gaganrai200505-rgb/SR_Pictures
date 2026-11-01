@@ -6,6 +6,7 @@ import { isMotionPaused, setMotionPaused, subscribeMotion } from '../lib/motion'
 import { setupPage } from '../lib/pageEffects';
 import Footer from './Footer';
 import Navbar from './Navbar';
+import FloatingWhatsApp from './FloatingWhatsApp';
 
 export default function SiteLayout() {
   const { pathname } = useLocation();
@@ -35,6 +36,7 @@ export default function SiteLayout() {
         <Outlet />
       </main>
       <Footer />
+      <FloatingWhatsApp />
     </div>
   );
 }

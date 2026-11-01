@@ -17,11 +17,13 @@ function Field({ error, id, children }: { error?: string; id: string; children: 
   );
 }
 
-const SUCCESS_NOTE = 'Inquiry received! Our studio coordinator will review your dates and reach out within 24 hours.';
+const SUCCESS_NOTE = 'Inquiry formatted! Connecting you directly to our WhatsApp studio team (+91 96322 08050)...';
+const WHATSAPP_PHONE = '919632208050';
 
 export function ContactForm() {
   const [errors, setErrors] = useState<Errors>({});
   const [done, setDone] = useState(false);
+  const [submittedWaUrl, setSubmittedWaUrl] = useState('');
   const [rateLimitSeconds, setRateLimitSeconds] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formLoadTime = useRef(Date.now());
@@ -85,13 +87,34 @@ export function ContactForm() {
     setErrors(er);
 
     if (Object.keys(er).length === 0) {
+      const name = String(d.get('name') ?? '').trim();
+      const subject = String(d.get('Subject') ?? '').trim();
+      const message = String(d.get('Message') ?? '').trim();
+
+      const waText = [
+        `*New Studio Enquiry — The SR Pictures*`,
+        `👤 *Name:* ${name || 'Client'}`,
+        `📧 *Email:* ${email}`,
+        `📌 *Event / Service:* ${subject}`,
+        `💬 *Requirements & Dates:* ${message}`,
+        `\n_Sent via SR Pictures Web Portfolio_`
+      ].join('\n');
+
+      const waUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(waText)}`;
+      setSubmittedWaUrl(waUrl);
+
       setIsSubmitting(true);
       setTimeout(() => {
         setIsSubmitting(false);
         setDone(true);
         recordFormSubmission();
         setRateLimitSeconds(45);
-      }, 600);
+        try {
+          window.open(waUrl, '_blank', 'noopener,noreferrer');
+        } catch (err) {
+          console.warn('Popup blocked by browser, user can click manual WhatsApp button:', err);
+        }
+      }, 500);
     }
   };
 
@@ -102,6 +125,30 @@ export function ContactForm() {
 
   return (
     <div className="contact-form-wrapper w-form">
+      {/* Quick Direct WhatsApp Access Banner */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M12.031 2C6.495 2 2 6.495 2 12.031c0 1.977.574 3.824 1.564 5.385L2 22l4.734-1.528A9.99 9.99 0 0 0 12.031 22C17.567 22 22 17.505 22 12.031 22 6.495 17.567 2 12.031 2zm5.786 14.282c-.244.686-1.42 1.328-1.956 1.393-.509.062-1.168.087-3.483-.872-2.73-1.134-4.48-3.905-4.618-4.088-.137-.184-1.1-1.464-1.1-2.791 0-1.328.697-1.978.945-2.247.244-.27.533-.338.711-.338.177 0 .356.002.511.009.167.008.389-.063.608.463.227.547.777 1.9.845 2.038.068.138.114.3.023.483-.092.184-.138.298-.275.463-.137.165-.29.368-.413.494-.138.138-.282.288-.122.563.16.275.71 1.171 1.525 1.897 1.05.934 1.935 1.223 2.21 1.36.275.138.435.115.595-.069.16-.184.687-.798.87-1.073.183-.275.366-.23.618-.138.252.092 1.594.752 1.869.89.275.138.458.207.527.321.068.115.068.664-.176 1.35z" />
+            </svg>
+          </div>
+          <div>
+            <div className="text-white text-sm font-medium">Prefer Instant WhatsApp Chat?</div>
+            <div className="text-xs text-neutral-400">Direct studio hotline: +91 96322 08050</div>
+          </div>
+        </div>
+        <a
+          href={`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent('Hi The SR Pictures! I would like to inquire about booking your team for an upcoming event.')}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold tracking-wide transition-all shadow-lg shadow-emerald-950/40"
+        >
+          <span>Chat on WhatsApp</span>
+          <span>→</span>
+        </a>
+      </div>
+
       <div className="form-heading">◉ Ready to start your project?</div>
 
       {rateLimitSeconds > 0 && (
@@ -207,9 +254,25 @@ export function ContactForm() {
       </form>
 
       {done && (
-        <div className="form-message-success w-form-done mt-4" style={{ display: 'block' }} role="status">
-          <div className="text-amber-400 font-semibold mb-1">Message Sent Successfully</div>
-          <div className="text-sm text-neutral-300">{SUCCESS_NOTE}</div>
+        <div className="form-message-success w-form-done mt-6 p-6 rounded-2xl bg-neutral-900 border border-emerald-500/30 text-center" style={{ display: 'block' }} role="status">
+          <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+          <div className="text-emerald-400 font-semibold text-lg mb-1">Enquiry Prepared for WhatsApp!</div>
+          <div className="text-sm text-neutral-300 max-w-md mx-auto mb-5">{SUCCESS_NOTE}</div>
+          {submittedWaUrl && (
+            <a
+              href={submittedWaUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-black font-semibold text-sm shadow-xl hover:scale-105 active:scale-95 transition-all"
+            >
+              <span>Open in WhatsApp (+91 96322 08050)</span>
+              <span>→</span>
+            </a>
+          )}
         </div>
       )}
     </div>
