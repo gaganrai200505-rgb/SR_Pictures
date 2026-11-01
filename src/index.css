@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /*
  * App-level additions on top of the reference site's Webflow stylesheet (styles/webflow.css).
  * Verified tokens from the live site: font Overused Grotesk (Arial fallback), 16px/500 base,
