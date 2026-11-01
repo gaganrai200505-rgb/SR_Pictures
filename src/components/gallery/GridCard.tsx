@@ -124,13 +124,8 @@ export default function GridCard({ data, onOpenLightbox, onClick }: GridCardProp
       )}
 
       {data.badge?.type === 'tooltip' && (
-        <div className="absolute bottom-6 right-3 left-3 z-20 flex items-center justify-between gap-2 p-2 rounded-xl bg-black/80 backdrop-blur-md border border-white/20 text-white shadow-2xl">
-          <span className="text-[10px] font-mono tracking-tight line-clamp-1">
-            {data.badge.text || 'Shadows of the City — Street Visuals'}
-          </span>
-          <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
-            <Play size={10} className="ml-0.5 fill-white" />
-          </div>
+        <div className="absolute bottom-4 right-4 z-20 w-8 h-8 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white shadow-2xl flex items-center justify-center">
+          <Play size={12} className="ml-0.5 fill-white" />
         </div>
       )}
 
@@ -139,18 +134,6 @@ export default function GridCard({ data, onOpenLightbox, onClick }: GridCardProp
         <span className="px-2 py-0.5 rounded-full bg-black/80 border border-white/20 text-[9px] font-mono text-neutral-300">
           ● REC 4K
         </span>
-      </div>
-
-      {/* Bottom Title Bar on Hover */}
-      <div className="absolute bottom-0 inset-x-0 p-3 pt-8 bg-gradient-to-t from-black via-black/70 to-transparent z-10 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <h4 className="text-xs font-bold text-white tracking-tight line-clamp-1">
-          {data.title}
-        </h4>
-        {data.specs && (
-          <p className="text-[8px] font-mono text-neutral-400">
-            {data.specs}
-          </p>
-        )}
       </div>
     </div>
   );

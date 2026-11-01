@@ -5,7 +5,6 @@ import {
   X,
 } from 'lucide-react';
 import ApertureBladeCard from './ApertureBladeCard';
-import MinimalBrandCard from './MinimalBrandCard';
 import GridCard, { type GridCardData } from './GridCard';
 import { ALL_DRIVE_VIDEOS } from './driveVideos';
 import { gallerySounds } from './soundEffects';
@@ -65,11 +64,13 @@ export default function VybnParallaxGrid() {
     ALL_DRIVE_VIDEOS[11], // lv_0_20260303203539
   ];
 
-  // ── Column 3: Brand Cards + 3 Drive Videos ──
+  // ── Column 3: 5 Drive Videos (Replaced Brand Cards with Videos) ──
   const col3Items = [
-    ALL_DRIVE_VIDEOS[12], // REELS FINAL
-    ALL_DRIVE_VIDEOS[13], // lv_0_20260618151155
-    ALL_DRIVE_VIDEOS[14], // lv_0_20260618151234
+    ALL_DRIVE_VIDEOS[12],
+    ALL_DRIVE_VIDEOS[13],
+    ALL_DRIVE_VIDEOS[14],
+    ALL_DRIVE_VIDEOS[6],
+    ALL_DRIVE_VIDEOS[7],
   ];
 
   // ── Column 4: 5 Drive Videos ──
@@ -153,11 +154,9 @@ export default function VybnParallaxGrid() {
 
         {/* ── COLUMN 3 (Moves DOWN on scroll) ── */}
         <motion.div style={{ y: yCol3 }} className="flex flex-col gap-3 md:gap-4">
-          <MinimalBrandCard type="vybn" title="VYBN" />
-          <MinimalBrandCard type="frameic" title="• Frameic Visuals™" />
-          {col3Items.map((item) => (
+          {col3Items.map((item, idx) => (
             <GridCard
-              key={item.id}
+              key={`${item.id}-c3-${idx}`}
               data={item}
               onOpenLightbox={(selected) => {
                 gallerySounds.playShutterClick();
