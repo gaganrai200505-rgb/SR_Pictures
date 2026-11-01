@@ -8,8 +8,13 @@ import SocialLinks from '../components/SocialLinks';
 import Subtitle from '../components/Subtitle';
 import TestimonialSlider from '../components/TestimonialSlider';
 import Video from '../components/Video';
+import { usePageSeo } from '../lib/usePageSeo';
 
 export default function Home() {
+  usePageSeo({
+    title: 'Cinematic Wedding & Commercial Studio',
+    description: 'Premier photography and cinematography studio based in Bengaluru. Crafting authentic, cinematic stories with natural light and high-end cine optics.',
+  });
   return (
     <>
     <div id="top" className="top"></div>

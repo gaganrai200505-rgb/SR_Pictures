@@ -1,10 +1,10 @@
-import { defineConfig, loadEnv } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import { defineConfig, loadEnv, type PluginOption, type UserConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 
 // https://vite.dev/config/
-export default defineConfig(async ({ mode }) => {
-  const plugins = [react(), tailwindcss()];
+export default defineConfig(async ({ mode }): Promise<UserConfig> => {
+  const plugins: PluginOption[] = [react(), tailwindcss()];
   try {
     // @ts-ignore
     const m = await import('./.vite-source-tags.js');
@@ -21,5 +21,28 @@ export default defineConfig(async ({ mode }) => {
     plugins,
     envPrefix: ['VITE_', 'NEXT_PUBLIC_'],
     define: processEnvDefines,
+    build: {
+      target: 'es2020',
+      minify: 'esbuild',
+      cssMinify: true,
+      rollupOptions: {
+        output: {
+          manualChunks(id: string) {
+            if (id.includes('node_modules')) {
+              if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+                return 'vendor-react';
+              }
+              if (id.includes('framer-motion')) {
+                return 'vendor-motion';
+              }
+              if (id.includes('lucide-react')) {
+                return 'vendor-icons';
+              }
+              return 'vendor-other';
+            }
+          },
+        },
+      },
+    },
   };
-})
+});

@@ -1,8 +1,13 @@
 import { Link } from 'react-router-dom';
 import Video from '../components/Video';
 import { heroBackground } from '../data/media';
+import { usePageSeo } from '../lib/usePageSeo';
 
 export default function NotFound() {
+  usePageSeo({
+    title: '404 - Page Not Found',
+    description: 'The requested page could not be found.',
+  });
   return (
     <div className="utility-page-wrap">
       <div className="utility-page-content">

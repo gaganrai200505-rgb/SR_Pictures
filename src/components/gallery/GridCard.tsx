@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Play } from 'lucide-react';
 
 export interface GridCardData {
@@ -24,7 +24,31 @@ interface GridCardProps {
 
 export default function GridCard({ data, onOpenLightbox, onClick }: GridCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Performance: Viewport-aware playback (play when near viewport, pause when offscreen)
+  useEffect(() => {
+    if (data.type !== 'video' || !containerRef.current) return;
+
+    const el = containerRef.current;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!videoRef.current) return;
+          if (entry.isIntersecting) {
+            videoRef.current.play().catch(() => {});
+          } else {
+            videoRef.current.pause();
+          }
+        });
+      },
+      { rootMargin: '200px 0px', threshold: 0.05 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [data.type]);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -39,6 +63,7 @@ export default function GridCard({ data, onOpenLightbox, onClick }: GridCardProp
 
   return (
     <div
+      ref={containerRef}
       onClick={(e) => {
         if (onClick) onClick(e);
         onOpenLightbox(data);
@@ -47,14 +72,13 @@ export default function GridCard({ data, onOpenLightbox, onClick }: GridCardProp
       onMouseLeave={handleMouseLeave}
       className="relative w-full aspect-[9/14] rounded-2xl md:rounded-[1.75rem] overflow-hidden bg-neutral-950 border border-white/10 hover:border-white/30 transition-all duration-500 cursor-pointer shadow-[0_10px_35px_rgba(0,0,0,0.85)] group select-none"
     >
-      {/* 1. Underlying Media (Original Drive Video with Local High-Speed Fallback) */}
+      {/* 1. Underlying Media */}
       <div className="absolute inset-0 w-full h-full overflow-hidden bg-black">
         {data.type === 'video' ? (
           <video
             ref={videoRef}
             src={data.src}
             poster={data.poster}
-            autoPlay
             loop
             muted
             playsInline

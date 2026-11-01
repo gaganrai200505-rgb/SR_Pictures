@@ -2,8 +2,13 @@ import Faq from '../components/Faq';
 import MainButton from '../components/MainButton';
 import Subtitle from '../components/Subtitle';
 import TestimonialSlider from '../components/TestimonialSlider';
+import { usePageSeo } from '../lib/usePageSeo';
 
 export default function Pricing() {
+  usePageSeo({
+    title: 'Packages & Pricing',
+    description: 'Transparent investment and bespoke photography & cinematography packages for weddings, pre-wedding films, and commercial productions.',
+  });
   return (
     <>
     <div id="top" className="top"></div>

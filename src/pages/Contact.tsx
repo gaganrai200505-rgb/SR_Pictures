@@ -3,8 +3,13 @@ import CtaWrapper from '../components/CtaWrapper';
 import Faq from '../components/Faq';
 import SocialLinks from '../components/SocialLinks';
 import Subtitle from '../components/Subtitle';
+import { usePageSeo } from '../lib/usePageSeo';
 
 export default function Contact() {
+  usePageSeo({
+    title: 'Book Your Date | Contact',
+    description: 'Get in touch with The SR Pictures studio. Check dates availability, request custom quotes, and book your wedding or commercial production.',
+  });
   return (
     <>
     <div id="top" className="top"></div>

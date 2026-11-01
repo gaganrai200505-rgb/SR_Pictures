@@ -5,8 +5,13 @@ import RollNumber from '../components/RollNumber';
 import SocialLinks from '../components/SocialLinks';
 import Subtitle from '../components/Subtitle';
 import Video from '../components/Video';
+import { usePageSeo } from '../lib/usePageSeo';
 
 export default function About() {
+  usePageSeo({
+    title: 'About the Studio & Philosophy',
+    description: 'Learn about The SR Pictures story, our craft philosophy, and our journey capturing milestone celebrations and cinematic moments.',
+  });
   return (
     <>
     <div id="top" className="top"></div>

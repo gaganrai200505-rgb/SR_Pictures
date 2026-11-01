@@ -2,8 +2,13 @@ import GallerySection from '../components/GallerySection';
 import CtaButton from '../components/CtaButton';
 import CtaWrapper from '../components/CtaWrapper';
 import Subtitle from '../components/Subtitle';
+import { usePageSeo } from '../lib/usePageSeo';
 
 export default function CaseStudies() {
+  usePageSeo({
+    title: 'Featured Films & Stories',
+    description: 'Explore cinematic case studies, luxury destination wedding films, and editorial stories crafted by The SR Pictures.',
+  });
   return (
     <>
       <div id="top" className="top"></div>

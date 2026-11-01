@@ -1,8 +1,13 @@
 import CtaButton from '../components/CtaButton';
 import CtaWrapper from '../components/CtaWrapper';
 import Subtitle from '../components/Subtitle';
+import { usePageSeo } from '../lib/usePageSeo';
 
 export default function Services() {
+  usePageSeo({
+    title: 'Studio Services & Cine Craft',
+    description: 'Cinematic wedding cinematography, candid photography, pre-wedding films, aerial drone coverage, and commercial visual storytelling.',
+  });
   return (
     <>
       <div id="top" className="top"></div>
