@@ -76,6 +76,20 @@ export default function Footer() {
               </div>
             </div>
             <div className="footer-content-block large-gap">
+              <div className="footer-link-wrap">
+                <button
+                  type="button"
+                  onClick={() => {
+                    sessionStorage.removeItem('sr_cinema_intro_seen');
+                    window.dispatchEvent(new CustomEvent('replay-sr-intro'));
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="link-text text-neutral-400 hover:text-amber-400 transition-colors uppercase font-mono text-[11px] tracking-wider cursor-pointer bg-transparent border-0 p-0"
+                  aria-label="Replay Cinematic Intro"
+                >
+                  Replay Intro ↺
+                </button>
+              </div>
               {[['/template-info/style-guide', 'Style Guide'], ['/template-info/licenses', 'Licenses'], ['/template-info/changelog', 'Changelog']].map(([to, l]) => (
                 <div className="footer-link-wrap" key={to}><LinkButton to={to}>{l}</LinkButton></div>
               ))}

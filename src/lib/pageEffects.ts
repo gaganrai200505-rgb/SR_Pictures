@@ -54,6 +54,63 @@ export function setupPage(): () => void {
       cleanups.push(loopInView(wrap, proxyLoop(40, apply)));
     });
 
+    /* ---------- Hero entrance choreography ---------- */
+    if (!reduce) {
+      const heroWrap = document.querySelector<HTMLElement>('.section-home-header');
+      if (heroWrap) {
+        const container3d = heroWrap.querySelector<HTMLElement>('._3d-container');
+        const scrollDown = heroWrap.querySelector<HTMLElement>('.scroll-down-wrap');
+        const locationWrap = heroWrap.querySelector<HTMLElement>('.location-wrap');
+        const title = heroWrap.querySelector<HTMLElement>('.cube-title-block');
+
+        const triggerHero = () => {
+          const heroTl = gsap.timeline();
+          if (container3d) {
+            heroTl.fromTo(
+              container3d,
+              { scale: 0.84, opacity: 0 },
+              { scale: 1, opacity: 1, duration: 1.3, ease: 'power3.out' },
+              0
+            );
+          }
+          if (title) {
+            heroTl.fromTo(
+              title,
+              { opacity: 0, scale: 0.88 },
+              { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out' },
+              0.15
+            );
+          }
+          if (scrollDown || locationWrap) {
+            heroTl.fromTo(
+              [scrollDown, locationWrap].filter(Boolean),
+              { opacity: 0, y: 20 },
+              { opacity: 1, y: 0, duration: 0.8, stagger: 0.12, ease: 'power3.out' },
+              0.35
+            );
+          }
+        };
+
+        const hasSeenIntro = sessionStorage.getItem('sr_cinema_intro_seen');
+        if (hasSeenIntro) {
+          triggerHero();
+        } else {
+          window.addEventListener('sr-intro-complete', triggerHero, { once: true });
+        }
+      }
+    }
+
+    /* ---------- Rotating star icon in intro ---------- */
+    qa('.star-icon').forEach((star) => {
+      const starTween = gsap.to(star, {
+        rotation: 360,
+        duration: 20,
+        ease: 'none',
+        repeat: -1,
+      });
+      cleanups.push(loopInView(star, starTween));
+    });
+
     /* ---------- About 3D video ring ---------- */
     qa('._3d-video-wrapper').forEach((wrap) => {
       const container = wrap.querySelector<HTMLElement>('._3d-video-container');
