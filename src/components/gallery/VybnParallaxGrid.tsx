@@ -3,6 +3,8 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import {
   ExternalLink,
   X,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import ApertureBladeCard from './ApertureBladeCard';
 import GridCard, { type GridCardData } from './GridCard';
@@ -30,11 +32,28 @@ export default function VybnParallaxGrid() {
   const yCol4 = useTransform(scrollYProgress, [0, 1], [-90, 90]);
   const yCol5 = useTransform(scrollYProgress, [0, 1], [110, -110]);
 
+  // Lightbox Navigation Functions
+  const handleNextVideo = () => {
+    if (!lightboxData) return;
+    const curIdx = ALL_DRIVE_VIDEOS.findIndex((v) => v.id === lightboxData.id);
+    const nextIdx = (curIdx + 1) % ALL_DRIVE_VIDEOS.length;
+    setLightboxData(ALL_DRIVE_VIDEOS[nextIdx]);
+  };
+
+  const handlePrevVideo = () => {
+    if (!lightboxData) return;
+    const curIdx = ALL_DRIVE_VIDEOS.findIndex((v) => v.id === lightboxData.id);
+    const prevIdx = (curIdx - 1 + ALL_DRIVE_VIDEOS.length) % ALL_DRIVE_VIDEOS.length;
+    setLightboxData(ALL_DRIVE_VIDEOS[prevIdx]);
+  };
+
   // Keyboard navigation for Lightbox
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!lightboxData) return;
       if (e.key === 'Escape') setLightboxData(null);
+      if (e.key === 'ArrowRight') handleNextVideo();
+      if (e.key === 'ArrowLeft') handlePrevVideo();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -244,28 +263,41 @@ export default function VybnParallaxGrid() {
               </button>
             </div>
 
-            {/* Center Video Viewport (Embeds Original Google Drive Player with Full HD & Controls) */}
+            {/* Center Video Viewport (Instant Hardware-Accelerated Playback with Navigation) */}
             <div
-              className="relative flex-1 flex items-center justify-center my-auto w-full max-h-[78vh]"
+              className="relative flex-1 flex items-center justify-center my-auto w-full max-h-[78vh] px-2 sm:px-12"
               onClick={(e) => e.stopPropagation()}
             >
-              {lightboxData.driveId ? (
-                <iframe
-                  src={`https://drive.google.com/file/d/${lightboxData.driveId}/preview`}
-                  allow="autoplay; fullscreen"
-                  title={lightboxData.title}
-                  className="w-full max-w-4xl aspect-video rounded-2xl border border-white/20 shadow-[0_0_80px_rgba(0,0,0,0.95)] bg-black"
-                />
-              ) : (
-                <video
-                  src={lightboxData.src}
-                  autoPlay
-                  controls
-                  loop
-                  playsInline
-                  className="max-h-[75vh] max-w-[88vw] rounded-2xl border border-white/15 shadow-[0_0_80px_rgba(0,0,0,0.9)] object-contain"
-                />
-              )}
+              {/* Previous Video Button */}
+              <button
+                type="button"
+                onClick={handlePrevVideo}
+                className="absolute left-2 sm:left-4 z-20 w-11 h-11 rounded-full bg-black/60 hover:bg-white text-white hover:text-black border border-white/20 flex items-center justify-center transition-all shadow-xl backdrop-blur-md"
+                aria-label="Previous video"
+              >
+                <ChevronLeft size={22} />
+              </button>
+
+              {/* Instant Native HD Video Player */}
+              <video
+                key={lightboxData.id}
+                src={lightboxData.src}
+                autoPlay
+                controls
+                loop
+                playsInline
+                className="max-h-[75vh] max-w-[85vw] rounded-2xl border border-white/20 shadow-[0_0_80px_rgba(0,0,0,0.95)] object-contain bg-black"
+              />
+
+              {/* Next Video Button */}
+              <button
+                type="button"
+                onClick={handleNextVideo}
+                className="absolute right-2 sm:right-4 z-20 w-11 h-11 rounded-full bg-black/60 hover:bg-white text-white hover:text-black border border-white/20 flex items-center justify-center transition-all shadow-xl backdrop-blur-md"
+                aria-label="Next video"
+              >
+                <ChevronRight size={22} />
+              </button>
             </div>
 
             {/* Bottom Info Bar with Direct Google Drive Master Video Link */}

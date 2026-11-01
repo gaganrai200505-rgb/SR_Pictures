@@ -53,3 +53,4 @@ export function throttle<T extends (...args: unknown[]) => void>(fn: T, waitMs: 
     }
   }) as T;
 }
+
